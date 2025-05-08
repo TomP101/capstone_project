@@ -1,11 +1,6 @@
 pipeline {
   agent any
 
-  environment {
-    AWS_REGION = 'eu-north-1'
-    TF_BUCKET  = 'your-terraform-state-bucket'
-  }
-
   tools {
     terraform 'terraform'
   }
@@ -17,46 +12,40 @@ pipeline {
   stages {
     stage('Init & Validate') {
       steps {
-        sh '''
-          cd envs/dev
-          terraform init \
-            -backend-config="bucket=${TF_BUCKET}" \
-            -backend-config="region=${AWS_REGION}"
-          terraform fmt -check -recursive
-          terraform validate
-        '''
+        dir('infra-aws') {
+          sh 'terraform init'
+          sh 'terraform fmt -check -recursive'
+          sh 'terraform validate'
+        }
       }
     }
 
     stage('Plan') {
       steps {
-        sh '''
-          cd envs/dev
-          terraform plan -out=tfplan
-        '''
-        archiveArtifacts artifacts: 'envs/dev/tfplan'
+        dir('infra-aws') {
+          sh 'terraform plan -out=tfplan'
+        }
+        archiveArtifacts artifacts: 'infra-aws/tfplan'
       }
     }
 
     stage('Apply') {
       when { branch 'main' }
       steps {
-        input message: 'Approve apply to dev?'
-        sh '''
-          cd envs/dev
-          terraform apply -auto-approve tfplan
-        '''
+        input message: 'Approve apply to AWS infra?'
+        dir('infra-aws') {
+          sh 'terraform apply -auto-approve tfplan'
+        }
       }
     }
 
     stage('Destroy') {
       when { expression { params.DESTROY } }
       steps {
-        input message: 'Approve destroy of dev?'
-        sh '''
-          cd envs/dev
-          terraform destroy -auto-approve
-        '''
+        input message: 'Approve destroy of AWS infra?'
+        dir('infra-aws') {
+          sh 'terraform destroy -auto-approve'
+        }
       }
     }
   }
