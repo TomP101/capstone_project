@@ -1,0 +1,51 @@
+services:
+  spring-petclinic:
+    build: .
+    ports:
+      - "8080:8080"
+      - "9404:9404"
+    depends_on:
+      db:
+         condition: service_healthy
+    environment:
+      - POSTGRES_URL=jdbc:postgresql://db:5432/petclinic
+  db:
+     image: postgres
+     restart: always
+     volumes:
+       - db-data:/var/lib/postgresql/data
+     environment:
+       - POSTGRES_DB=petclinic
+       - POSTGRES_USER=petclinic
+       - POSTGRES_PASSWORD=petclinic
+     ports:
+       - 5432:5432
+     healthcheck:
+       test: ["CMD", "pg_isready", "-U", "petclinic"]
+       interval: 10s
+       timeout: 5s
+       retries: 5
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - spring-petclinic
+  grafana:
+    image: grafana/grafana-oss:latest
+    user: "472"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER:  admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+volumes:
+  db-data:
+  grafana-data:

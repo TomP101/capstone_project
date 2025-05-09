@@ -1,0 +1,50 @@
+pipeline {
+  agent any
+
+  environment {
+    AWS_REGION     = 'eu-north-1'
+    AWS_ACCOUNT_ID = '774305577837'
+    ECR_REPO       = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/petclinic"
+    IMAGE_TAG      = "${GIT_COMMIT[0..6]}"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Login to ECR') {
+      steps {
+        sh """
+          aws ecr get-login-password --region ${AWS_REGION} \
+            | docker login --username AWS --password-stdin ${ECR_REPO}
+        """
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        dir('app') {
+          sh "docker build -t ${ECR_REPO}:${IMAGE_TAG} ."
+        }
+      }
+    }
+
+    stage('Push to ECR') {
+      steps {
+        sh "docker push ${ECR_REPO}:${IMAGE_TAG}"
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "Obraz zbudowany i wypchnięty: ${ECR_REPO}:${IMAGE_TAG}"
+    }
+    failure {
+      echo "Błąd podczas build/push obrazu."
+    }
+  }
+}
