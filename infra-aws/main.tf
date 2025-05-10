@@ -12,6 +12,7 @@ module "policies" {
 module "compute" {
   source                = "./modules/compute"
   cluster_name          = "petclinic-cluster"
+  ami_id                = "ami-09fdd0b7882a4ec7b" 
   instance_type         = var.instance_type
   instance_profile_name = module.policies.instance_profile_name
   subnet_ids            = [ module.network.subnet_id ]

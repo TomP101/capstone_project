@@ -3,6 +3,11 @@ variable "cluster_name" {
   type        = string
 }
 
+variable "ami_id" {
+  description = "AMI ID for ECS-optimized host instances"
+  type        = string
+}
+
 variable "instance_type" {
   description = "EC2 instance type for the ECS hosts"
   type        = string
