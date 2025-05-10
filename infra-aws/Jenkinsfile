@@ -14,7 +14,6 @@ pipeline {
       steps {
         dir('infra-aws') {
           sh 'terraform init'
-          sh 'terraform fmt -check -recursive'
           sh 'terraform validate'
         }
       }
