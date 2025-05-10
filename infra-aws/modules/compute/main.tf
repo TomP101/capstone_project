@@ -28,9 +28,5 @@ resource "aws_autoscaling_group" "ecs" {
   max_size         = var.max_size
   desired_capacity = var.desired_capacity
   vpc_zone_identifier = var.subnet_ids
-  tags = [{
-    key                 = "Name"
-    value               = var.tag_name
-    propagate_at_launch = true
-  }]
+
 }
