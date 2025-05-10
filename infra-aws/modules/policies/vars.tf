@@ -1,35 +1,30 @@
-variable "region" {
-  description = "AWS region"
+variable "instance_role_name" {
+  description = "IAM role name for ECS EC2 hosts"
   type        = string
-  default     = "eu-north-1"
 }
 
-variable "instance_type" {
-  description = "EC2 instance type for ECS hosts"
+variable "instance_profile_name" {
+  description = "IAM instance profile name for ECS EC2 hosts"
   type        = string
-  default     = "t3.medium"
 }
 
-variable "min_size" {
-  description = "Minimum number of ECS host instances"
-  type        = number
-  default     = 1
+variable "instance_managed_policies" {
+  description = "Managed policy ARNs for ECS host role"
+  type        = list(string)
+  default     = [
+    "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+  ]
 }
 
-variable "max_size" {
-  description = "Maximum number of ECS host instances"
-  type        = number
-  default     = 3
-}
-
-variable "desired_capacity" {
-  description = "Desired number of ECS host instances"
-  type        = number
-  default     = 2
-}
-
-variable "tag_name" {
-  description = "Name tag for all resources"
+variable "task_execution_role_name" {
+  description = "IAM role name for ECS task execution"
   type        = string
-  default     = "petclinic"
+}
+
+variable "task_execution_managed_policies" {
+  description = "Managed policy ARNs for ECS task execution"
+  type        = list(string)
+  default     = [
+    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  ]
 }
