@@ -2,8 +2,8 @@ module "network" {
   source = "./modules/network"
 }
 
-module "iam" {
-  source                   = "./modules/iam"
+module "policies" {
+  source                   = "./modules/policies"
   instance_role_name       = "ecs-host-role"
   instance_profile_name    = "ecs-host-profile"
   task_execution_role_name = "ecs-task-exec-role"
