@@ -2,7 +2,7 @@ module "network" {
   source = "./modules/network"
 }
 
-module "iam" {
+module "policies" {
   source                    = "./modules/iam"
   instance_role_name        = "ecs-host-role"
   instance_profile_name     = "ecs-host-profile"
