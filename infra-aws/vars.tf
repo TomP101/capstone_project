@@ -1,21 +1,29 @@
-variable "repo_name" {
-  type    = string
-  default = "terraform-lb"
+variable "instance_type" {
+  description = "EC2 instance type for ECS hosts"
+  type        = string
+  default     = "t3.medium"
 }
 
-variable "ami_id" {
-  type    = string
-  default = "ami-075449515af5df0d1"
+variable "min_size" {
+  description = "Minimum number of ECS host instances"
+  type        = number
+  default     = 1
 }
 
-variable "region" {
-  type    = string
-  default = "eu-north-1"
+variable "max_size" {
+  description = "Maximum number of ECS host instances"
+  type        = number
+  default     = 3
+}
+
+variable "desired_capacity" {
+  description = "Desired number of ECS host instances"
+  type        = number
+  default     = 2
 }
 
 variable "tag_name" {
-  type    = string
-  default = "2025_internship_war"
+  description = "Name tag for all resources"
+  type        = string
+  default     = "petclinic"
 }
-
-
