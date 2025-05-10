@@ -2,9 +2,6 @@ resource "aws_ecs_cluster" "this" {
   name = var.cluster_name
 }
 
-data "aws_ami" "ecs" {
-  id = data.aws_ssm_parameter.ecs_ami.value
-}
 resource "aws_launch_template" "ecs" {
   name_prefix   = "${var.cluster_name}-lt-"
   image_id      = var.ami_id
