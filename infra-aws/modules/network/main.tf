@@ -98,7 +98,7 @@ resource "aws_lb_target_group" "tg_ec2" {
   name        = "target-group"
   port        = "80"
   protocol    = "HTTP"
-  target_type = "instance"
+  target_type = "ip"
   vpc_id      = aws_vpc.network.id
 }
 
