@@ -47,7 +47,7 @@ resource "aws_iam_role_policy_attachment" "task_attach" {
 
 resource "aws_iam_role" "task_role" {
   name               = "ecs-task-role"
-  assume_role_policy = data.aws_iam_policy_document.ecs_task_assume.json
+  assume_role_policy = data.aws_iam_policy_document.task_assume.json
 }
 
 resource "aws_iam_role_policy_attachment" "task_role_ssm" {
