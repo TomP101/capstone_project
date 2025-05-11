@@ -44,3 +44,19 @@ resource "aws_iam_role_policy_attachment" "task_attach" {
   role       = aws_iam_role.task_execution.name
   policy_arn = each.key
 }
+
+resource "aws_iam_role" "task_role" {
+  name               = "ecs-task-role"
+  assume_role_policy = data.aws_iam_policy_document.ecs_task_assume.json
+}
+
+resource "aws_iam_role_policy_attachment" "task_role_ssm" {
+  role       = aws_iam_role.task_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "task_role_exec" {
+  role       = aws_iam_role.task_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+

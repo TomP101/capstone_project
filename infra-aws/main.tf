@@ -17,6 +17,8 @@ module "compute" {
   instance_profile_name = module.policies.instance_profile_name
   subnet_ids            = [ module.network.subnet_id ]
   instance_sg_ids       = module.network.sg_ids
+  execution_role_arn    = module.policies.task_execution_role_arn
+  task_role_arn         = module.policies.task_role_arn
   min_size              = var.min_size
   max_size              = var.max_size
   desired_capacity      = var.desired_capacity

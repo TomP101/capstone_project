@@ -62,3 +62,9 @@ variable "target_group_arn" {
   description = "ARN of the ALB target group to attach the ECS service to"
   type        = string
 }
+
+
+variable "task_role_arn" {
+  type        = string
+  description = "ARN of the IAM role that tasks should assume (for ECS Exec)"
+}
