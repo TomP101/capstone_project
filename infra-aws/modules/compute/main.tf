@@ -55,6 +55,8 @@ resource "aws_ecs_service" "petclinic" {
   desired_count   = 2
   task_definition = aws_ecs_task_definition.petclinic.arn
 
+  enable_execute_command = true
+
   network_configuration {
     subnets          = var.subnet_ids
     security_groups  = var.instance_sg_ids
