@@ -7,12 +7,15 @@ resource "aws_launch_template" "ecs" {
   image_id      = var.ami_id
   instance_type = var.instance_type
 
+  key_name      = "prywatny_tomek_aws"
+
   user_data = base64encode(file("${path.module}/user_data.sh"))
   iam_instance_profile {
     name = var.instance_profile_name
   }
 
   vpc_security_group_ids = var.instance_sg_ids
+
 }
 
 resource "aws_autoscaling_group" "ecs" {

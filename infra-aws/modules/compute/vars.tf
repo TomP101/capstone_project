@@ -73,3 +73,8 @@ variable "task_role_arn" {
   type        = string
   description = "ARN of the IAM role that the task’s containers should assume"
 }
+
+variable "key_name" {
+  description = "The name of the EC2 Key Pair to use for SSH access"
+  type        = string
+}
