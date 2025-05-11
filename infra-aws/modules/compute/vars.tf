@@ -3,6 +3,12 @@ variable "cluster_name" {
   type        = string
 }
 
+variable "region" {
+  description = "AWS region"
+  type        = string
+  default     = "eu-north-1"
+}
+
 variable "ami_id" {
   description = "AMI ID for ECS-optimized host instances"
   type        = string
