@@ -64,7 +64,12 @@ variable "target_group_arn" {
 }
 
 
+variable "execution_role_arn" {
+  type        = string
+  description = "ARN of the ECS task execution role"
+}
+
 variable "task_role_arn" {
   type        = string
-  description = "ARN of the IAM role that tasks should assume (for ECS Exec)"
+  description = "ARN of the IAM role that the task’s containers should assume"
 }
