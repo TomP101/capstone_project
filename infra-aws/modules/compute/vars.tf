@@ -75,6 +75,7 @@ variable "task_role_arn" {
 }
 
 variable "key_name" {
-  description = "The name of the EC2 Key Pair to use for SSH access"
+  description = "Name of the EC2 Key Pair for SSH access"
   type        = string
 }
+

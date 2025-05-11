@@ -24,4 +24,6 @@ module "compute" {
   desired_capacity      = var.desired_capacity
   tag_name              = var.tag_name
   target_group_arn      = module.network.tg_arn
+
+  key_name              = "prywatny_tomek_aws"
 }

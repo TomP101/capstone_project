@@ -7,7 +7,7 @@ resource "aws_launch_template" "ecs" {
   image_id      = var.ami_id
   instance_type = var.instance_type
 
-  key_name      = "prywatny_tomek_aws"
+  key_name = var.key_name
 
   user_data = base64encode(file("${path.module}/user_data.sh"))
   iam_instance_profile {
