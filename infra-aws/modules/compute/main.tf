@@ -43,14 +43,7 @@ resource "aws_ecs_task_definition" "petclinic" {
       portMappings = [
         { containerPort = 8080, hostPort = 8080, protocol = "tcp" }
       ]
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = "/ecs/${var.cluster_name}"
-          awslogs-region        = var.region
-          awslogs-stream-prefix = "petclinic"
-        }
-      }
+      
     }
   ])
 }
