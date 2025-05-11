@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "petclinic" {
   container_definitions = jsonencode([
     {
       name      = "petclinic"
-      image     = "774305577837.dkr.ecr.eu-north-1.amazonaws.com/petclinic:latest"
+      image     = "774305577837.dkr.ecr.eu-north-1.amazonaws.com/petclinic:3e8a14d"
       essential = true
       portMappings = [
         { containerPort = 8080, hostPort = 8080, protocol = "tcp" }
