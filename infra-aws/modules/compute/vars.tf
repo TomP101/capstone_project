@@ -11,7 +11,7 @@ variable "ami_id" {
 variable "instance_type" {
   description = "EC2 instance type for the ECS hosts"
   type        = string
-  default     = "t3.medium"
+  default     = "t4g.medium"
 }
 
 variable "instance_profile_name" {

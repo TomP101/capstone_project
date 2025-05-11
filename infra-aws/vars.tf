@@ -7,7 +7,7 @@ variable "region" {
 variable "instance_type" {
   description = "EC2 instance type for ECS hosts"
   type        = string
-  default     = "t4g.micro"
+  default     = "t4g.medium"
 }
 
 variable "min_size" {
