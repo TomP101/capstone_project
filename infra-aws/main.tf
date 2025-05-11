@@ -21,4 +21,5 @@ module "compute" {
   max_size              = var.max_size
   desired_capacity      = var.desired_capacity
   tag_name              = var.tag_name
+  target_group_arn      = module.network.tg_arn
 }

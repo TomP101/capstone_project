@@ -57,3 +57,8 @@ variable "tag_name" {
   description = "Value for the Name tag on ECS hosts"
   type        = string
 }
+
+variable "target_group_arn" {
+  description = "ARN of the ALB target group to attach the ECS service to"
+  type        = string
+}
