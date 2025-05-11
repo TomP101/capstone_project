@@ -100,6 +100,10 @@ resource "aws_lb_target_group" "tg_ec2" {
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_vpc.network.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 #Create a listener for the load balancer that forwards the traffic to the instances in the target group
