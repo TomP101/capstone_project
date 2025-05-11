@@ -65,7 +65,6 @@ resource "aws_ecs_service" "petclinic" {
   network_configuration {
     subnets          = var.subnet_ids
     security_groups  = var.instance_sg_ids
-    assign_public_ip = true
   }
 
   load_balancer {
