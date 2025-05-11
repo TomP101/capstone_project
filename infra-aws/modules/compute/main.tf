@@ -58,19 +58,24 @@ resource "aws_ecs_task_definition" "petclinic" {
 resource "aws_ecs_service" "petclinic" {
   name            = "${var.cluster_name}-svc"
   cluster         = aws_ecs_cluster.this.id
-  task_definition = aws_ecs_task_definition.petclinic.arn
-  desired_count   = var.desired_capacity
   launch_type     = "EC2"
+  desired_count   = 2
+  task_definition = aws_ecs_task_definition.petclinic.arn
+
+  network_configuration {
+    subnets          = var.subnet_ids
+    security_groups  = var.instance_sg_ids
+    assign_public_ip = true
+  }
 
   load_balancer {
-    target_group_arn = var.target_group_arn
     container_name   = "petclinic"
     container_port   = 8080
+    target_group_arn = var.target_group_arn
   }
 
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
-
-  depends_on = [aws_autoscaling_group.ecs]
 }
+
 
