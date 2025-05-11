@@ -27,3 +27,50 @@ resource "aws_autoscaling_group" "ecs" {
   vpc_zone_identifier = var.subnet_ids
 
 }
+
+resource "aws_ecs_task_definition" "petclinic" {
+  family                   = "${var.cluster_name}-task"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["EC2"]
+  cpu                      = "512"
+  memory                   = "1024"
+
+  container_definitions = jsonencode([
+    {
+      name      = "petclinic"
+      image     = "774305577837.dkr.ecr.eu-north-1.amazonaws.com/petclinic:latest"
+      essential = true
+      portMappings = [
+        { containerPort = 8080, hostPort = 8080, protocol = "tcp" }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/${var.cluster_name}"
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "petclinic"
+        }
+      }
+    }
+  ])
+}
+
+resource "aws_ecs_service" "petclinic" {
+  name            = "${var.cluster_name}-svc"
+  cluster         = aws_ecs_cluster.this.id
+  task_definition = aws_ecs_task_definition.petclinic.arn
+  desired_count   = var.desired_capacity
+  launch_type     = "EC2"
+
+  load_balancer {
+    target_group_arn = var.target_group_arn
+    container_name   = "petclinic"
+    container_port   = 8080
+  }
+
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
+
+  depends_on = [aws_autoscaling_group.ecs]
+}
+
