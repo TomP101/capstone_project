@@ -36,21 +36,62 @@ resource "aws_ecs_task_definition" "petclinic" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
   cpu                      = "512"
-  memory                   = "1024"
+  memory                   = "2048"
 
   execution_role_arn = var.execution_role_arn
   task_role_arn      = var.task_role_arn
 
+  volume {
+    name = "db-data"
+    host_path {
+      # container will see /var/lib/postgresql/data
+      path = "/ecs/${var.cluster_name}/db-data"
+    }
+  }
 
   container_definitions = jsonencode([
     {
-      name      = "petclinic"
-      image     = "774305577837.dkr.ecr.eu-north-1.amazonaws.com/petclinic:3e8a14d"
+      name      = "spring-petclinic"
+      image     = "${var.ecr_repo_url}:latest"
+      cpu       = 512
+      memory    = 1024
       essential = true
       portMappings = [
-        { containerPort = 8080, hostPort = 8080, protocol = "tcp" }
+        { containerPort = 8080, hostPort = 8080, protocol = "tcp" },
+        { containerPort = 9404, hostPort = 9404, protocol = "tcp" }
       ]
-      
+      environment = [
+        { name = "POSTGRES_URL", value = "jdbc:postgresql://db:5432/petclinic" }
+      ]
+    },
+    {
+      name      = "db"
+      image     = "postgres:latest"
+      cpu       = 256
+      memory    = 512
+      essential = true
+      portMappings = [
+        { containerPort = 5432, hostPort = 5432, protocol = "tcp" }
+      ]
+      environment = [
+        { name = "POSTGRES_DB",       value = "petclinic" },
+        { name = "POSTGRES_USER",     value = "petclinic" },
+        { name = "POSTGRES_PASSWORD", value = "petclinic" }
+      ]
+      healthCheck = {
+        command     = ["CMD-SHELL","pg_isready -U petclinic"]
+        interval    = 10
+        timeout     = 5
+        retries     = 5
+        startPeriod = 0
+      }
+      mountPoints = [
+        {
+          sourceVolume  = "db-data"
+          containerPath = "/var/lib/postgresql/data"
+          readOnly      = false
+        }
+      ]
     }
   ])
 }
@@ -59,18 +100,18 @@ resource "aws_ecs_service" "petclinic" {
   name            = "${var.cluster_name}-svc"
   cluster         = aws_ecs_cluster.this.id
   launch_type     = "EC2"
-  desired_count   = 2
+  desired_count   = 1
   task_definition = aws_ecs_task_definition.petclinic.arn
 
   enable_execute_command = true
 
   network_configuration {
-    subnets          = var.subnet_ids
-    security_groups  = var.instance_sg_ids
+    subnets         = var.subnet_ids
+    security_groups = var.instance_sg_ids
   }
 
   load_balancer {
-    container_name   = "petclinic"
+    container_name   = "spring-petclinic"
     container_port   = 8080
     target_group_arn = var.target_group_arn
   }
@@ -78,5 +119,3 @@ resource "aws_ecs_service" "petclinic" {
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
 }
-
-
