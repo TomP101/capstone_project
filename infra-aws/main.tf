@@ -15,7 +15,7 @@ module "compute" {
   ami_id                = "ami-03d06800319b9bb52" 
   instance_type         = var.instance_type
   instance_profile_name = module.policies.instance_profile_name
-  subnet_ids            = [ module.network.subnet_id ]
+  subnet_ids            = module.network.subnet_ids
   instance_sg_ids       = module.network.sg_ids
   execution_role_arn    = module.policies.task_execution_role_arn
   task_role_arn         = module.policies.task_role_arn

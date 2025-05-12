@@ -1,5 +1,5 @@
 output "subnet_ids" {
-  description = "Lista subnetów (eu-north-1a i eu-north-1b) dla zasobów"
+  description = "List of subnets (eu-north-1a and eu-north-1b)"
   value       = [
     aws_subnet.subnet_eu_north1a.id,
     aws_subnet.subnet_eu_north1b.id,
@@ -7,21 +7,16 @@ output "subnet_ids" {
 }
 
 output "sg_ids" {
-  description = "Lista Security Groups dla instancji i ALB"
+  description = "Security Group IDs for instances and ALB"
   value       = [ aws_security_group.sg1.id ]
 }
 
+output "tg_arn" {
+  description = "ARN of the ALB target group"
+  value       = aws_lb_target_group.tg_ec2.arn
+}
+
 output "alb_listener_arn" {
-  description = "ARN istniejącego listenera ALB (port 80)"
+  description = "ARN of the ALB listener"
   value       = aws_lb_listener.listener_forward_all.arn
-}
-
-output "lb_arn" {
-  description = "ARN ALB"
-  value       = aws_lb.application-lb.arn
-}
-
-output "lb_dns_name" {
-  description = "DNS name ALB"
-  value       = aws_lb.application-lb.dns_name
 }
