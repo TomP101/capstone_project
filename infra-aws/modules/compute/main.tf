@@ -43,9 +43,8 @@ resource "aws_ecs_task_definition" "petclinic" {
 
   volume {
     name = "db-data"
-    host_path {
-      # container will see /var/lib/postgresql/data
-      path = "/ecs/${var.cluster_name}/db-data"
+    host {
+      source_path = "/ecs/${var.cluster_name}/db-data"
     }
   }
 
