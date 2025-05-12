@@ -52,7 +52,7 @@ resource "aws_ecs_task_definition" "petclinic" {
   container_definitions = jsonencode([
     {
       name      = "spring-petclinic"
-      image     = "${var.ecr_repo_url}:latest"
+      image     = "774305577837.dkr.ecr.eu-north-1.amazonaws.com/petclinic:3e8a14d"
       cpu       = 512
       memory    = 1024
       essential = true
