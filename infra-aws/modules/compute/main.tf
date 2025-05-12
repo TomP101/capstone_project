@@ -35,7 +35,7 @@ resource "aws_ecs_task_definition" "petclinic" {
   family                   = "${var.cluster_name}-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
-  cpu                      = "512"
+  cpu                      = "1024"
   memory                   = "2048"
 
   execution_role_arn = var.execution_role_arn
