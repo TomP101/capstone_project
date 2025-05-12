@@ -42,10 +42,8 @@ resource "aws_ecs_task_definition" "petclinic" {
   task_role_arn      = var.task_role_arn
 
   volume {
-    name = "db-data"
-    host {
-      source_path = "/ecs/${var.cluster_name}/db-data"
-    }
+    name      = "db-data"
+    host_path = "/ecs/${var.cluster_name}/db-data"
   }
 
   container_definitions = jsonencode([
