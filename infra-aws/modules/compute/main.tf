@@ -53,12 +53,18 @@ resource "aws_ecs_task_definition" "petclinic" {
       cpu       = 512
       memory    = 1024
       essential = true
+
+      dependsOn = [
+        { containerName = "db", condition = "START"   },
+        { containerName = "db", condition = "HEALTHY" }
+      ]
+      
       portMappings = [
         { containerPort = 8080, hostPort = 8080, protocol = "tcp" },
         { containerPort = 9404, hostPort = 9404, protocol = "tcp" }
       ]
       environment = [
-        { name = "POSTGRES_URL", value = "jdbc:postgresql://db:5432/petclinic" }
+        { name = "POSTGRES_URL", value = "jdbc:postgresql://127.0.0.1:5432/petclinic" }
       ]
     },
     {
