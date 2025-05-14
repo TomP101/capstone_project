@@ -36,6 +36,15 @@ resource "aws_cloudwatch_log_group" "ecs" {
   retention_in_days = 14
 }
 
+data "aws_ecr_repository" "repo" {
+  name = var.repo_name
+}
+
+data "aws_ecr_image" "latest" {
+  repository_name = var.repo_name
+  most_recent     = true
+}
+
 resource "aws_ecs_task_definition" "petclinic" {
   family                   = "${var.cluster_name}-task"
   network_mode             = "awsvpc"
@@ -54,7 +63,7 @@ resource "aws_ecs_task_definition" "petclinic" {
   container_definitions = jsonencode([
     {
       name      = "spring-petclinic"
-      image     = "774305577837.dkr.ecr.eu-north-1.amazonaws.com/petclinic:2bdae76"
+      image     = "${data.aws_ecr_repository.repo.repository_url}@${data.aws_ecr_image.latest.image_digest}"
       cpu       = 512
       memory    = 1024
       essential = true

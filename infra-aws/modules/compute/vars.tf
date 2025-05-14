@@ -25,6 +25,12 @@ variable "instance_profile_name" {
   type        = string
 }
 
+variable "repo_name" {
+  description = "Name of the ECR repository"
+  type        = string
+  default     = "petclinic"
+}
+
 variable "subnet_ids" {
   description = "List of subnet IDs for the ECS AutoScalingGroup"
   type        = list(string)
