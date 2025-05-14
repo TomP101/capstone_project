@@ -49,16 +49,16 @@ resource "aws_ecs_task_definition" "petclinic" {
   container_definitions = jsonencode([
     {
       name      = "spring-petclinic"
-      image     = "774305577837.dkr.ecr.${var.region}.amazonaws.com/petclinic:3e8a14d"
+      image     = "774305577837.dkr.ecr.eu-north-1.amazonaws.com/petclinic:3e8a14d"
       cpu       = 512
       memory    = 1024
       essential = true
 
       dependsOn = [
-        { containerName = "db", condition = "STARTING" },
-        { containerName = "db", condition = "HEALTHY"  }
+        { containerName = "db", condition = "START"   },
+        { containerName = "db", condition = "HEALTHY" }
       ]
-
+      
       portMappings = [
         { containerPort = 8080, hostPort = 8080, protocol = "tcp" },
         { containerPort = 9404, hostPort = 9404, protocol = "tcp" }
@@ -66,7 +66,6 @@ resource "aws_ecs_task_definition" "petclinic" {
       environment = [
         { name = "POSTGRES_URL", value = "jdbc:postgresql://127.0.0.1:5432/petclinic" }
       ]
-
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -82,7 +81,6 @@ resource "aws_ecs_task_definition" "petclinic" {
       cpu       = 256
       memory    = 512
       essential = true
-
       portMappings = [
         { containerPort = 5432, hostPort = 5432, protocol = "tcp" }
       ]
@@ -105,7 +103,6 @@ resource "aws_ecs_task_definition" "petclinic" {
           readOnly      = false
         }
       ]
-
       logConfiguration = {
         logDriver = "awslogs"
         options = {
