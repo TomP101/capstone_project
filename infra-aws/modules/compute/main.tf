@@ -31,6 +31,11 @@ resource "aws_autoscaling_group" "ecs" {
 
 }
 
+resource "aws_cloudwatch_log_group" "ecs" {
+  name              = "/ecs/${var.cluster_name}"
+  retention_in_days = 14
+}
+
 resource "aws_ecs_task_definition" "petclinic" {
   family                   = "${var.cluster_name}-task"
   network_mode             = "awsvpc"
