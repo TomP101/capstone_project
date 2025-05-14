@@ -29,7 +29,6 @@ pipeline {
     }
 
     stage('Apply') {
-      when { branch 'main' }
       steps {
         dir('infra-aws') {
           sh 'terraform apply -auto-approve tfplan'
