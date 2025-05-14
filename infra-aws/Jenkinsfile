@@ -31,7 +31,6 @@ pipeline {
     stage('Apply') {
       when { branch 'main' }
       steps {
-        input message: 'Approve apply to AWS infra?'
         dir('infra-aws') {
           sh 'terraform apply -auto-approve tfplan'
         }
@@ -41,7 +40,6 @@ pipeline {
     stage('Destroy') {
       when { expression { params.DESTROY } }
       steps {
-        input message: 'Approve destroy of AWS infra?'
         dir('infra-aws') {
           sh 'terraform destroy -auto-approve'
         }
