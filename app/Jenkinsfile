@@ -42,9 +42,13 @@ pipeline {
   post {
     success {
       echo "Obraz zbudowany i wypchnięty: ${ECR_REPO}:${IMAGE_TAG}"
+      build job: 'infra', wait: false
+      deleteDir()
     }
     failure {
       echo "Błąd podczas build/push obrazu."
+      deleteDir()
     }
+
   }
 }
