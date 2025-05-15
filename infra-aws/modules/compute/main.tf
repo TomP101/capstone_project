@@ -133,7 +133,7 @@ resource "aws_ecs_service" "petclinic" {
   name            = "${var.cluster_name}-svc"
   cluster         = aws_ecs_cluster.this.id
   launch_type     = "EC2"
-  desired_count   = 1
+  desired_count   = 2
   task_definition = aws_ecs_task_definition.petclinic.arn
 
   enable_execute_command = true
